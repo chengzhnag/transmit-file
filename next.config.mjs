@@ -1,12 +1,18 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: false,
-  experimental: {
-    serverActions: {
-      // 👇 change file size limit
-      bodySizeLimit: "1000MB",
-    }
-  }
+  transpilePackages: [
+    "antd",
+    "rc-util",
+    "@babel/runtime",
+    "@ant-design/icons",
+    "@ant-design/icons-svg",
+    "rc-pagination",
+    "rc-picker",
+    "rc-tree",
+    "rc-table",
+    "rc-input"
+  ],
 };
 
 export default nextConfig;

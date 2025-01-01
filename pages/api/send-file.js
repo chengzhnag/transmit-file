@@ -1,6 +1,7 @@
 import { sessions } from './create-session';
 import fs from 'fs';
 import path from 'path';
+const tmpPath = require('os').tmpdir()
 
 export const config = {
   api: {
@@ -14,7 +15,8 @@ export default function handler(req, res) {
   if (req.method === 'POST') {
     const { code, file } = req.body;
     if (sessions[code]) {
-      const filePath = path.join(process.cwd(), 'uploads', `${code}_${file.name}`);
+      console.log('tmpPath:', tmpPath);
+      const filePath = path.resolve(tmpPath, `${code}_${file.name}`);
       fs.writeFileSync(filePath, Buffer.from(file.data, 'base64'));
       sessions[code].file = filePath;
       sessions[code].fileName = `${code}_${file.name}`;

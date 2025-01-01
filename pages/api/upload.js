@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+const tmpPath = require('os').tmpdir()
 
 export const config = {
   api: {
@@ -13,7 +14,7 @@ export default function handler(req, res) {
   if (req.method === 'POST') {
     const { file } = req.body;
 
-    const filePath = path.join(process.cwd(), 'uploads', file.name);
+    const filePath = path.resolve(tmpPath, file.name);
     fs.writeFileSync(filePath, Buffer.from(file.data, 'base64'));
 
     res.status(200).json({ message: 'File uploaded successfully!' });

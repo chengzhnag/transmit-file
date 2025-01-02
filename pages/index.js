@@ -18,7 +18,7 @@ export default function Home() {
             <img alt="logo" src="https://gw.alipayobjects.com/zos/rmsportal/SVDdpZEbAlWBFuRGIIIL.svg" />
             <span>LANDING</span>
           </a>
-          <div>
+          <div style={{ display: 'flex' }}>
             <a href="https://github.com/ant-design/ant-design-landing" alt="help" target="_blank" className={styles.gitbtn}>帮助</a>
             <a href="https://github.com/chengzhnag" alt="git" target="_blank" className={styles.gitbtn}>Github</a>
           </div>

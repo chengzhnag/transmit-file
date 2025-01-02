@@ -2,17 +2,17 @@
   box-shadow: 0 0 0 transparent;
   width: 100%;
   z-index: 999;
-  height: 64px;
-  line-height: 64px;
-  background: #2f54eb;
-  padding: 0;
+  height: 64px !important;
+  line-height: 64px !important;
+  background: #2f54eb !important;
+  padding: 0 !important;
 }
 
 .headerContent {
   width: 100%;
-  padding: 0 24px;
-  max-width: 1200px;
-  margin: auto;
+  padding: 0 24px !important;
+  max-width: 1200px !important;
+  margin: auto !important;
 }
 
 .logo {
@@ -116,11 +116,11 @@
 
 .footer {
   font-size: 14px;
-  background-color: #000;
-  position: relative;
-  z-index: 100;
-  color: rgba(255, 255, 255, .65);
-  box-shadow: 0 1000px 0 1000px #fff;
+  background-color: #000 !important;
+  position: relative !important;
+  z-index: 100 !important;
+  color: rgba(255, 255, 255, .65) !important;
+  box-shadow: 0 1000px 0 1000px #fff !important;
 }
 
 .footerContent {

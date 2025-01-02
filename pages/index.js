@@ -1,110 +1,75 @@
-import { useState } from 'react';
-import { Upload, Button, Input, Progress, message, Space } from 'antd';
-import { UploadOutlined } from '@ant-design/icons';
-import axios from 'axios';
+import {
+  Layout, Flex,
+  Typography, Col, Row
+} from 'antd';
+import { FireTwoTone } from '@ant-design/icons';
+
+import styles from '../styles/home.module.css';
+
+const { Header, Footer, Content } = Layout;
 
 export default function Home() {
-  const [file, setFile] = useState(null);
-  const [code, setCode] = useState('');
-  const [sessionCode, setSessionCode] = useState('');
-  const [uploadProgress, setUploadProgress] = useState(0);
-  const [downloadProgress, setDownloadProgress] = useState(0);
-  const [receivedFile, setReceivedFile] = useState(null);
-  const [receivedFileName, setReceivedFileName] = useState('');
-
-  const handleFileChange = (info) => {
-    console.log('handleFileChange:', info);
-    setFile(info.fileList?.[0]?.originFileObj);
-  };
-
-  const createSession = async () => {
-    try {
-      const res = await axios.post('/api/create-session');
-      setSessionCode(res.data.code);
-      message.success('Session created successfully');
-    } catch (err) {
-      message.error('Failed to create session');
-    }
-  };
-
-  const handleSendFile = async () => {
-    console.log('handleSendFile:', file, code);
-    if (!file || !code) return;
-
-    const reader = new FileReader();
-    reader.onloadend = async () => {
-      const formData = { code, file: { name: file.name, data: reader.result.split(',')[1] } };
-
-      try {
-        await axios.post('/api/send-file', formData, {
-          onUploadProgress: (progressEvent) => {
-            setUploadProgress(Math.round((progressEvent.loaded * 100) / progressEvent.total));
-          }
-        });
-        message.success('File sent successfully');
-      } catch (err) {
-        message.error('Failed to send file');
-      }
-    };
-    reader.readAsDataURL(file);
-  };
-
-  const handleReceiveFile = async () => {
-    const xhr = new XMLHttpRequest();
-    xhr.open('POST', '/api/receive-file', true);
-    xhr.responseType = 'json';
-    xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
-
-    xhr.onprogress = (event) => {
-      if (event.lengthComputable) {
-        setDownloadProgress(Math.round((event.loaded * 100) / event.total));
-      }
-    };
-
-    xhr.onload = () => {
-      if (xhr.status === 200) {
-        const fileData = xhr.response.file;
-        const fileName = xhr.response.fileName;
-        const fileBlob = new Blob([Buffer.from(fileData, 'base64')], { type: 'application/octet-stream' });
-        const url = URL.createObjectURL(fileBlob);
-        setReceivedFile(url);
-        setReceivedFileName(fileName);
-        message.success('File received successfully');
-      } else {
-        message.error('Failed to receive file');
-      }
-    };
-
-    xhr.onerror = () => {
-      message.error('Failed to receive file');
-    };
-
-    xhr.send(JSON.stringify({ code }));
-  };
 
   return (
-    <div style={{ padding: '20px' }}>
-      <h1>文件传输</h1>
-      <Space direction="vertical" size="large">
-        <Upload maxCount={1} beforeUpload={() => false} onChange={handleFileChange}>
-          <Button icon={<UploadOutlined />}>选择文件</Button>
-        </Upload>
-        <Button onClick={createSession}>创建会话</Button>
-        {sessionCode && <p>会话代码: {sessionCode}</p>}
-        <Input placeholder="输入会话代码" value={code} onChange={(e) => setCode(e.target.value)} />
-        <Button type="primary" onClick={handleSendFile}>发送文件</Button>
-        <Progress percent={uploadProgress} />
-        <Button type="primary" onClick={handleReceiveFile}>接收文件</Button>
-        <Progress percent={downloadProgress} />
-      </Space>
-      {receivedFile && (
-        <div>
-          <h2>接收到的文件</h2>
-          <a href={receivedFile} download={receivedFileName}>
-            下载文件
+    <Layout>
+      <Header className={styles.header}>
+        <Flex className={styles.headerContent} justify='space-between' align='center'>
+          <a className={styles.logo} href="/">
+            <img alt="logo" src="https://gw.alipayobjects.com/zos/rmsportal/SVDdpZEbAlWBFuRGIIIL.svg" />
+            <span>LANDING</span>
+          </a>
+          <div>
+            <a href="https://github.com/ant-design/ant-design-landing" alt="help" target="_blank" className={styles.gitbtn}>帮助</a>
+            <a href="https://github.com/chengzhnag" alt="git" target="_blank" className={styles.gitbtn}>Github</a>
+          </div>
+        </Flex>
+      </Header>
+      <Content className={styles.content}>
+        <div className={styles.contentInner}>
+          <img src='/assets/bg.svg' />
+          <div className={`${styles.contentInnerContent} contentInnerContent`}>
+            <img alt="logo" src="https://gw.alipayobjects.com/zos/rmsportal/SVDdpZEbAlWBFuRGIIIL.svg" />
+            <p>
+              Ant Design Landing 平台拥有丰富的各类首页模板，下载模板代码包，即可快速使用，也可使用首页编辑器，快速搭建一个属于你的专属首页
+            </p>
+            <div className={styles.buttonWrapper}>
+              <a href="/entry" alt="git">
+                立即使用
+              </a>
+            </div>
+          </div>
+        </div>
+        <div className={styles.contentInner2}>
+          <Typography.Title level={1} style={{
+            margin: '0 auto 64px',
+            fontSize: 32,
+            color: '#314659',
+            textAlign: 'center'
+          }}>
+            三大特征
+          </Typography.Title>
+          <Row >
+            {Array.from({ length: 3 }).map((_, i) => (
+              <Col key={i} xs={24} sm={24} md={8} span={8} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: 48 }}>
+                <FireTwoTone style={{ fontSize: 76 }} />
+                <p style={{ fontSize: 16, color: '#0d1a26', marginTop: 56, textAlign: 'center', padding: '0 48px', maxWidth: 320 }}>
+                  测试文本测试文本测试文本测试文本测试文本测试文本
+                </p>
+              </Col>
+            ))}
+          </Row>
+        </div>
+      </Content>
+      <Footer className={styles.footer}>
+        <div className={styles.footerContent}>
+          Made with
+          <span>❤</span>
+          by
+          <a target="_blank" rel="noopener noreferrer" href="https://github.com/chengzhnag">
+            chengzhnag
           </a>
         </div>
-      )}
-    </div>
+      </Footer>
+    </Layout>
   );
 }

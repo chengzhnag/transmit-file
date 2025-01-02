@@ -1,0 +1,145 @@
+.header {
+  box-shadow: 0 0 0 transparent;
+  width: 100%;
+  z-index: 999;
+  height: 64px;
+  line-height: 64px;
+  background: #2f54eb;
+  padding: 0;
+}
+
+.headerContent {
+  width: 100%;
+  padding: 0 24px;
+  max-width: 1200px;
+  margin: auto;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.logo img {
+  width: 28px;
+  height: 28px;
+  margin-right: 8px;
+}
+
+.logo span {}
+
+.gitbtn {
+  display: inline-block;
+  border: 1px solid #fff;
+  border-radius: 28px;
+  height: 28px;
+  line-height: 28px;
+  color: #fff;
+  padding: 0 16px;
+  margin-left: 20px;
+  box-sizing: content-box;
+  cursor: pointer;
+}
+
+.content {}
+
+.contentInner {
+  width: 100%;
+  background: #2f54eb;
+  color: #fff;
+  position: relative;
+  height: 560px;
+  overflow: hidden;
+}
+
+.contentInner2 {
+  padding: 128px 24px;
+  margin: auto;
+  background: #fff;
+}
+
+.contentInnerContent {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 560px;
+  width: 88%;
+}
+
+.contentInnerContent img {
+  width: 160px;
+  height: 160px;
+}
+
+.contentInnerContent p {
+  font-size: 16px;
+  line-height: 32px;
+  font-weight: 400;
+  max-width: 557px;
+  margin: 60px auto 44px;
+  text-align: center;
+}
+
+.buttonWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.buttonWrapper a {
+  min-width: 136px;
+  height: 40px;
+  line-height: 40px;
+  text-align: center;
+  border-radius: 20px;
+  display: inline-block;
+  font-size: 16px;
+  box-sizing: content-box;
+  transform: translateY(0);
+  box-shadow: 0 0 0 transparent;
+  text-decoration: none;
+  background-color: transparent;
+  outline: none;
+  cursor: pointer;
+  border: 1px solid #fff;
+  color: #fff;
+  margin-left: 24px;
+  transition: box-shadow .3s cubic-bezier(.215, .61, .355, 1), transform .3s cubic-bezier(.215, .61, .355, 1), color .3s cubic-bezier(.215, .61, .355, 1), border .3s cubic-bezier(.215, .61, .355, 1), background .3s cubic-bezier(.215, .61, .355, 1);
+}
+
+.footer {
+  font-size: 14px;
+  background-color: #000;
+  position: relative;
+  z-index: 100;
+  color: rgba(255, 255, 255, .65);
+  box-shadow: 0 1000px 0 1000px #fff;
+}
+
+.footerContent {
+  margin: auto;
+  max-width: 1200px;
+  border-top: none;
+  line-height: 32px;
+  overflow: hidden;
+  font-size: 16px;
+  text-align: center;
+}
+
+.footerContent span {
+  color: #f73f51;
+  font-size: 22px;
+  margin: 0 10px;
+}
+
+.footerContent a {
+  color: rgba(255, 255, 255, .65);
+  margin-left: 4px;
+}

@@ -15,7 +15,7 @@ export default function Home() {
       <Header className={styles.header}>
         <Flex className={styles.headerContent} justify='space-between' align='center'>
           <a className={styles.logo} href="/">
-            <img alt="logo" src="https://gw.alipayobjects.com/zos/rmsportal/SVDdpZEbAlWBFuRGIIIL.svg" />
+            <img alt="logo" src="https://cdn.jsdelivr.net/gh/Zgrowth/image@master/20250103/method-draw-image-(6).1e8okgy0xx.svg" />
             <span>LANDING</span>
           </a>
           <div style={{ display: 'flex' }}>
@@ -28,7 +28,7 @@ export default function Home() {
         <div className={styles.contentInner}>
           <img src='/assets/bg.svg' />
           <div className={`${styles.contentInnerContent} contentInnerContent`}>
-            <img alt="logo" src="https://gw.alipayobjects.com/zos/rmsportal/SVDdpZEbAlWBFuRGIIIL.svg" />
+            <img alt="logo" src="https://cdn.jsdelivr.net/gh/Zgrowth/image@master/20250103/method-draw-image-(6).1e8okgy0xx.svg" />
             <p>
               Ant Design Landing 平台拥有丰富的各类首页模板，下载模板代码包，即可快速使用，也可使用首页编辑器，快速搭建一个属于你的专属首页
             </p>

@@ -25,6 +25,7 @@ const FileUploader = () => {
       retryDelays: [0, 1000, 3000, 5000], // 重试延迟
       chunkSize: 3 * 1024 * 1024, // 分片大小（3MB）
       metadata: {
+        code: '1234',
         filename: file.name,
         filetype: file.type,
       },
@@ -38,6 +39,7 @@ const FileUploader = () => {
         setProgress(Number(percentage));
       },
       onSuccess: () => {
+        console.log('upload:', upload);
         setUploading(false);
         setUploadedFileUrl(upload.url); // 上传成功后的文件 URL
         alert('文件上传成功！');

@@ -6,13 +6,14 @@ import {
 } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import axios from 'axios';
+const tus = require('tus-js-client');
 
 export default function Entry() {
   const [file, setFile] = useState(null);
   const [code, setCode] = useState('');
   const [sessionCode, setSessionCode] = useState('');
+  const [uploading, setUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
-  const [downloadProgress, setDownloadProgress] = useState(0);
   const [receivedFile, setReceivedFile] = useState(null);
   const [receivedFileName, setReceivedFileName] = useState('');
 
@@ -35,60 +36,93 @@ export default function Entry() {
     console.log('handleSendFile:', file, code);
     if (!file || !code) return;
 
-    const reader = new FileReader();
-    reader.onloadend = async () => {
-      const formData = { code, file: { name: file.name, data: reader.result.split(',')[1] } };
+    setUploading(true);
+    setUploadProgress(0);
 
-      try {
-        await axios.post('/api/send-file', formData, {
-          onUploadProgress: (progressEvent) => {
-            setUploadProgress(Math.round((progressEvent.loaded * 100) / progressEvent.total));
-          }
-        });
-        message.success('File sent successfully');
-      } catch (err) {
-        message.error('Failed to send file');
-      }
-    };
-    reader.readAsDataURL(file);
+    const upload = new tus.Upload(file, {
+      endpoint: '/api/upload', // 服务器上传接口
+      retryDelays: [0, 1000, 3000, 5000], // 重试延迟
+      chunkSize: 3 * 1024 * 1024, // 分片大小（3MB）
+      metadata: {
+        code,
+        filename: file.name,
+        filetype: file.type,
+      },
+      onError: (error) => {
+        console.error('上传失败:', error);
+        alert('上传失败，请重试');
+        setUploading(false);
+      },
+      onProgress: (bytesUploaded, bytesTotal) => {
+        const percentage = ((bytesUploaded / bytesTotal) * 100).toFixed(2);
+        setUploadProgress(Number(percentage));
+      },
+      onSuccess: () => {
+        console.log('upload:', upload, upload.url);
+        setUploading(false);
+        alert('文件上传成功！');
+      },
+    });
+
+    upload.start(); // 开始上传
   };
 
   const handleReceiveFile = async () => {
-    const xhr = new XMLHttpRequest();
-    xhr.open('POST', '/api/receive-file', true);
-    xhr.responseType = 'json';
-    xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
-
-    xhr.onprogress = (event) => {
-      if (event.lengthComputable) {
-        setDownloadProgress(Math.round((event.loaded * 100) / event.total));
-      }
-    };
-
-    xhr.onload = () => {
-      if (xhr.status === 200) {
-        const fileData = xhr.response.file;
-        const fileName = xhr.response.fileName;
-        const fileBlob = new Blob([Buffer.from(fileData, 'base64')], { type: 'application/octet-stream' });
-        const url = URL.createObjectURL(fileBlob);
-        setReceivedFile(url);
-        setReceivedFileName(fileName);
-        message.success('File received successfully');
+    console.log('handleReceiveFile:', code);
+    try {
+      const req = await axios.post('/api/receive-file', { code });
+      console.log('req:', req);
+      const status = req?.data?.status;
+      if (status === 1) {
+        setReceivedFile(req?.data?.filePath);
+        setReceivedFileName(req?.data?.fileName);
       } else {
-        message.error('Failed to receive file');
+        setTimeout(() => {
+          handleReceiveFile();
+        }, 1500);
       }
-    };
+    } catch (err) {
+      console.log('handleReceiveFile error:', err || err?.message);
+    }
+  };
 
-    xhr.onerror = () => {
-      message.error('Failed to receive file');
-    };
+  const downloadFile = async (code, fileName) => {
+    try {
+      // 调用下载接口
+      const response = await fetch(`/api/download?code=${code}`);
+      if (!response.ok) {
+        throw new Error('文件下载失败');
+      }
 
-    xhr.send(JSON.stringify({ code }));
+      // 将响应转换为 Blob
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+
+      // 创建下载链接并触发下载
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = fileName;
+      document.body.appendChild(a);
+      a.click();
+
+      // 清理
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+    } catch (err) {
+      console.error('文件下载失败:', err);
+      alert('文件下载失败，请重试');
+    }
   };
 
   return (
     <div>
-      <Space direction="vertical" size="large">
+      <Button type="primary" href='/send'>
+        我要发送
+      </Button>
+      <Button type="primary" href='/receive'>
+        我要接收
+      </Button>
+      {/* <Space direction="vertical" size="large">
         <Upload maxCount={1} beforeUpload={() => false} onChange={handleFileChange}>
           <Button icon={<UploadOutlined />}>选择文件</Button>
         </Upload>
@@ -98,15 +132,16 @@ export default function Entry() {
         <Button type="primary" onClick={handleSendFile}>发送文件</Button>
         <Progress percent={uploadProgress} />
         <Button type="primary" onClick={handleReceiveFile}>接收文件</Button>
-        <Progress percent={downloadProgress} />
-      </Space>
+      </Space> */}
       {
         receivedFile && (
           <div>
             <h2>接收到的文件</h2>
-            <a href={receivedFile} download={receivedFileName}>
+            <Button type="primary" onClick={() => {
+              downloadFile(code, receivedFileName);
+            }}>
               下载文件
-            </a>
+            </Button>
           </div>
         )
       }

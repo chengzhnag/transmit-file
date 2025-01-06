@@ -2,7 +2,7 @@ import { Server, Upload } from '@tus/server'
 import { FileStore } from '@tus/file-store'
 import path from 'path';
 const tmpPath = require('os').tmpdir();
-import { sessions } from '../create-session';
+import cache from '../../../lib/catch';
 
 const tusServer = new Server({
   path: '/api/upload', // 上传接口路径
@@ -11,9 +11,12 @@ const tusServer = new Server({
     directory: path.resolve(tmpPath), // 文件存储目录
   }),
   onUploadFinish: (req, res, upload) => {
-    console.log('onUploadFinish', req.url,res, upload);
+    const globalSeesion = cache.get('globalSeesion') || {};
     const code = upload.metadata.code;
-    sessions[code].file = req.url;
+    globalSeesion[code].filePath = req.url;
+    globalSeesion[code].localFilePath = upload?.storage?.path;
+    globalSeesion[code].fileName = upload?.metadata?.filename;
+    cache.set('globalSeesion', globalSeesion);
   }
 });
 

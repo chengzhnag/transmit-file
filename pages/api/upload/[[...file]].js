@@ -10,6 +10,7 @@ const tusServer = new Server({
   datastore: new FileStore({
     directory: path.resolve(tmpPath), // 文件存储目录
   }),
+  respectForwardedHeaders: true,
   onUploadFinish: (req, res, upload) => {
     const globalSeesion = cache.get('globalSeesion') || {};
     const code = upload.metadata.code;

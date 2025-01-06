@@ -1,13 +1,24 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { ConfigProvider } from 'antd';
 import "@/styles/globals.css";
 
 import theme from '../theme/themeConfig.js';
 
-const App = ({ Component, pageProps }) => (
-  <ConfigProvider theme={theme}>
-    <Component {...pageProps} />
-  </ConfigProvider>
-);
+function App({ Component, pageProps }) {
+
+  useEffect(() => {
+    const setupVConsole = async () => {
+      const VConsole = (await import('vconsole')).default
+      new VConsole()
+    }
+    setupVConsole()
+  }, [])
+
+  return (
+    <ConfigProvider theme={theme}>
+      <Component {...pageProps} />
+    </ConfigProvider>
+  );
+}
 
 export default App;

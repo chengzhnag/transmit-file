@@ -4,7 +4,7 @@
   z-index: 999;
   height: 64px !important;
   line-height: 64px !important;
-  background: #2f54eb !important;
+  background: #476bff !important;
   padding: 0 !important;
 }
 
@@ -48,7 +48,7 @@
 
 .contentInner {
   width: 100%;
-  background: #2f54eb;
+  background: #476bff;
   color: #fff;
   position: relative;
   height: 560px;
@@ -110,7 +110,6 @@
   cursor: pointer;
   border: 1px solid #fff;
   color: #fff;
-  margin-left: 24px;
   transition: box-shadow .3s cubic-bezier(.215, .61, .355, 1), transform .3s cubic-bezier(.215, .61, .355, 1), color .3s cubic-bezier(.215, .61, .355, 1), border .3s cubic-bezier(.215, .61, .355, 1), background .3s cubic-bezier(.215, .61, .355, 1);
 }
 

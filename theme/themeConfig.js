@@ -1,7 +1,9 @@
 const theme = {
   token: {
     fontSize: 16,
-    colorPrimary: '#52c41a',
+    // Seed Token，影响范围大
+    colorPrimary: '#3d7fff',
+    borderRadius: 4,
   },
 };
 

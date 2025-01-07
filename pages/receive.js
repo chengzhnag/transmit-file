@@ -1,18 +1,31 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import {
-  Button, Input,
-  Space, Spin
+  Button, Input, Space,
+  Grid, Spin, Layout,
+  message, Typography
 } from 'antd';
 import axios from 'axios';
+
+import styles from '../styles/send.module.css';
+
+const { Paragraph, Title } = Typography;
+const { Content } = Layout;
+const { useBreakpoint } = Grid;
 
 export default function Entry() {
   const [code, setCode] = useState('');
   const [loading, setLoading] = useState(false);
   const [receivedFile, setReceivedFile] = useState(null);
   const [receivedFileName, setReceivedFileName] = useState('');
+  const [isDown, setIsDown] = useState(false);
+  const screens = useBreakpoint();
 
   const handleReceiveFile = async () => {
     console.log('handleReceiveFile:', code);
+    if (!code) {
+      message.error('请输入会话代码');
+      return;
+    }
     setLoading(true);
     try {
       const req = await axios.post('/api/receive-file', { code });
@@ -25,7 +38,7 @@ export default function Entry() {
       } else {
         setTimeout(() => {
           handleReceiveFile();
-        }, 1500);
+        }, 2000);
       }
     } catch (err) {
       setLoading(false);
@@ -38,7 +51,8 @@ export default function Entry() {
       // 调用下载接口
       const response = await fetch(`/api/download?code=${code}`);
       if (!response.ok) {
-        throw new Error('文件下载失败');
+        message.error('文件下载失败，请重试');
+        return;
       }
 
       // 将响应转换为 Blob
@@ -55,31 +69,62 @@ export default function Entry() {
       // 清理
       window.URL.revokeObjectURL(url);
       document.body.removeChild(a);
+      setIsDown(true);
     } catch (err) {
       console.error('文件下载失败:', err);
-      alert('文件下载失败，请重试');
+      message.error('文件下载失败，请重试');
     }
   };
 
+  const isMobile = useMemo(() => {
+    return screens?.xs;
+  }, [screens]);
+
   return (
-    <div>
-      <Space direction="vertical" size="large">
-        <Input placeholder="输入会话代码" value={code} onChange={(e) => setCode(e.target.value)} />
-        <Button type="primary" onClick={handleReceiveFile}>接收文件</Button>
-      </Space>
-      {
-        receivedFile && (
-          <div>
-            <h2>接收到的文件</h2>
-            <Button type="primary" onClick={() => {
-              downloadFile(code, receivedFileName);
-            }}>
-              下载文件
+    <Layout style={{ minHeight: '100vh', background: '#fff' }}>
+      <Content style={{ padding: 18 }}>
+        <div className={styles.block}>
+          <Title level={5}>输入会话代码：</Title>
+          <Input.OTP
+            length={5}
+            value={code}
+            onChange={(text) => {
+              console.log('text:', text);
+              setCode(text);
+            }}
+          />
+          <div style={{ marginTop: 16 }}>
+            <Button type="primary" onClick={handleReceiveFile}>
+              接收文件
             </Button>
           </div>
-        )
-      }
-      <Spin spinning={loading} fullscreen />
-    </div>
+        </div>
+        {
+          receivedFile && (
+            <div className={styles.block}>
+              <Title level={5}>对方已发送文件，点击下载：</Title>
+              <Paragraph>文件名：{receivedFileName}</Paragraph>
+              <Space>
+                <Button disabled={isDown} type="primary" onClick={() => {
+                  downloadFile(code, receivedFileName);
+                }}>
+                  {isDown ? '已下载' : '下载文件'}
+                </Button>
+                {
+                  isMobile ? null : (
+                    <Button onClick={() => {
+                      window.location.href = '/';
+                    }}>
+                      回到首页
+                    </Button>
+                  )
+                }
+              </Space>
+            </div>
+          )
+        }
+      </Content>
+      <Spin tip="等待对方发送文件..." spinning={loading} fullscreen />
+    </Layout>
   );
 }

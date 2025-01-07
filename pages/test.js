@@ -21,7 +21,7 @@ const FileUploader = () => {
     setProgress(0);
 
     const upload = new tus.Upload(file, {
-      endpoint: 'https://a.952737.xyz/api/upload', // 服务器上传接口
+      endpoint: '/api/upload', // 服务器上传接口
       retryDelays: [0, 1000, 3000, 5000], // 重试延迟
       chunkSize: 3 * 1024 * 1024, // 分片大小（3MB）
       metadata: {

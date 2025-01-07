@@ -1,0 +1,12 @@
+.block {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    opacity: 1;
+    background-color: rgb(255, 255, 255);
+    border-radius: 18px;
+    box-shadow: rgba(3, 3, 3, 0.1) 2px 0px 10px;
+    border: 0px solid rgb(229, 231, 235);
+    padding: 24px 18px;
+    margin-bottom: 16px;
+  }

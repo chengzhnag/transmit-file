@@ -1,6 +1,7 @@
 import {
   Layout, Flex,
-  Typography, Col, Row
+  Typography, Col, Row,
+  Space
 } from 'antd';
 import { FireTwoTone } from '@ant-design/icons';
 
@@ -33,9 +34,14 @@ export default function Home() {
               Ant Design Landing 平台拥有丰富的各类首页模板，下载模板代码包，即可快速使用，也可使用首页编辑器，快速搭建一个属于你的专属首页
             </p>
             <div className={styles.buttonWrapper}>
-              <a href="/entry" alt="git">
-                立即使用
-              </a>
+              <Space>
+                <a href="/send" alt="git">
+                  我要发送
+                </a>
+                <a href="/receive" alt="git">
+                  我要接收
+                </a>
+              </Space>
             </div>
           </div>
         </div>

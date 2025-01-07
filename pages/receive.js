@@ -18,6 +18,8 @@ export default function Entry() {
   const [receivedFile, setReceivedFile] = useState(null);
   const [receivedFileName, setReceivedFileName] = useState('');
   const [isDown, setIsDown] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const [loadingTip, setLoadingTip] = useState('等待对方发送文件...');
   const screens = useBreakpoint();
 
   const handleReceiveFile = async () => {
@@ -43,10 +45,11 @@ export default function Entry() {
     } catch (err) {
       setLoading(false);
       console.log('handleReceiveFile error:', err || err?.message);
+      message.error(err?.response?.message || '获取文件失败，请确认会话代码是否正确');
     }
   };
 
-  const downloadFile = async (code, fileName) => {
+  const downloadFile2 = async (code, fileName) => {
     try {
       // 调用下载接口
       const response = await fetch(`/api/download?code=${code}`);
@@ -75,6 +78,43 @@ export default function Entry() {
       message.error('文件下载失败，请重试');
     }
   };
+
+  const downloadFile = async (code, fileName) => {
+    try {
+      // 调用下载接口
+      const response = await axios({
+        url: `/api/download?code=${code}`,
+        method: 'GET',
+        responseType: 'blob', // 返回数据类型为 Blob
+        onDownloadProgress: (progressEvent) => {
+          console.log('progressEvent:', progressEvent);
+          const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+          setProgress(percentCompleted);
+        }
+      });
+
+      // 将响应转换为 Blob
+      const blob = new Blob([response.data]);
+      const url = window.URL.createObjectURL(blob);
+
+      // 创建下载链接并触发下载
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = fileName;
+      document.body.appendChild(a);
+      a.click();
+
+      // 清理
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+      setIsDown(true);
+      setLoadingTip('等待对方发送文件...');
+    } catch (err) {
+      console.error('文件下载失败:', err);
+      message.error('文件下载失败，请重试');
+    }
+  };
+
 
   const isMobile = useMemo(() => {
     return screens?.xs;
@@ -106,6 +146,7 @@ export default function Entry() {
               <Paragraph>文件名：{receivedFileName}</Paragraph>
               <Space>
                 <Button disabled={isDown} type="primary" onClick={() => {
+                  setLoadingTip('正在下载文件中...');
                   downloadFile(code, receivedFileName);
                 }}>
                   {isDown ? '已下载' : '下载文件'}
@@ -124,7 +165,7 @@ export default function Entry() {
           )
         }
       </Content>
-      <Spin tip="等待对方发送文件..." spinning={loading} fullscreen />
+      <Spin tip={loadingTip} percent={progress} spinning={loading} fullscreen />
     </Layout>
   );
 }

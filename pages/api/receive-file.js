@@ -20,7 +20,7 @@ export default function handler(req, res) {
         res.status(200).json({ filePath: null, status: 0, success: true });
       }
     } else {
-      res.status(404).json({ message: 'File not found' });
+      res.status(404).json({ message: '该会话不存在，请输入正确的会话代码' });
     }
   } else {
     res.status(405).json({ message: 'Method not allowed' });

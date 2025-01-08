@@ -15,11 +15,11 @@ const { useBreakpoint } = Grid;
 export default function Entry() {
   const [code, setCode] = useState('');
   const [loading, setLoading] = useState(false);
+  const [downLoading, setDownLoading] = useState(false);
   const [receivedFile, setReceivedFile] = useState(null);
   const [receivedFileName, setReceivedFileName] = useState('');
   const [isDown, setIsDown] = useState(false);
   const [progress, setProgress] = useState(0);
-  const [loadingTip, setLoadingTip] = useState('等待对方发送文件...');
   const screens = useBreakpoint();
 
   const handleReceiveFile = async () => {
@@ -49,45 +49,15 @@ export default function Entry() {
     }
   };
 
-  const downloadFile2 = async (code, fileName) => {
-    try {
-      // 调用下载接口
-      const response = await fetch(`/api/download?code=${code}`);
-      if (!response.ok) {
-        message.error('文件下载失败，请重试');
-        return;
-      }
-
-      // 将响应转换为 Blob
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
-
-      // 创建下载链接并触发下载
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = fileName;
-      document.body.appendChild(a);
-      a.click();
-
-      // 清理
-      window.URL.revokeObjectURL(url);
-      document.body.removeChild(a);
-      setIsDown(true);
-    } catch (err) {
-      console.error('文件下载失败:', err);
-      message.error('文件下载失败，请重试');
-    }
-  };
-
   const downloadFile = async (code, fileName) => {
     try {
+      setDownLoading(true);
       // 调用下载接口
       const response = await axios({
-        url: `/api/download?code=${code}`,
+        url: `${receivedFile}`,
         method: 'GET',
         responseType: 'blob', // 返回数据类型为 Blob
         onDownloadProgress: (progressEvent) => {
-          console.log('progressEvent:', progressEvent);
           const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
           setProgress(percentCompleted);
         }
@@ -108,12 +78,23 @@ export default function Entry() {
       window.URL.revokeObjectURL(url);
       document.body.removeChild(a);
       setIsDown(true);
-      setLoadingTip('等待对方发送文件...');
+      setDownLoading(false);
+      handleRemoveFile();
     } catch (err) {
+      setDownLoading(false);
       console.error('文件下载失败:', err);
       message.error('文件下载失败，请重试');
     }
   };
+
+  const handleRemoveFile = async () => {
+    try {
+      const req = await axios.get(`/api/remove-file?code=${code}`);
+      console.log('handleRemoveFile req:', req);
+    } catch (err) {
+      console.log('handleRemoveFile error:', err || err?.message);
+    }
+  }
 
 
   const isMobile = useMemo(() => {
@@ -129,7 +110,6 @@ export default function Entry() {
             length={5}
             value={code}
             onChange={(text) => {
-              console.log('text:', text);
               setCode(text);
             }}
           />
@@ -145,10 +125,13 @@ export default function Entry() {
               <Title level={5}>对方已发送文件，点击下载：</Title>
               <Paragraph>文件名：{receivedFileName}</Paragraph>
               <Space>
-                <Button disabled={isDown} type="primary" onClick={() => {
-                  setLoadingTip('正在下载文件中...');
-                  downloadFile(code, receivedFileName);
-                }}>
+                <Button
+                  disabled={isDown}
+                  type="primary"
+                  onClick={() => {
+                    downloadFile(code, receivedFileName);
+                  }}
+                >
                   {isDown ? '已下载' : '下载文件'}
                 </Button>
                 {
@@ -165,7 +148,8 @@ export default function Entry() {
           )
         }
       </Content>
-      <Spin tip={loadingTip} percent={progress} spinning={loading} fullscreen />
+      <Spin tip="等待对方发送文件..." spinning={loading} fullscreen />
+      <Spin tip={`正在下载文件，目前进度：${progress}%...`} spinning={downLoading} fullscreen />
     </Layout>
   );
 }

@@ -7,7 +7,7 @@ export default function handler(req, res) {
     const globalSeesion = cache.get('globalSeesion') || {};
     if (globalSeesion[code]) {
       if (globalSeesion[code].filePath) {
-        res.status(200).json({
+        return res.status(200).json({
           filePath: globalSeesion[code].filePath,
           fileName: globalSeesion[code].fileName,
           status: 1,
@@ -17,12 +17,12 @@ export default function handler(req, res) {
         // fs.unlinkSync(globalSeesion[code].file);
         // delete globalSeesion[code];
       } else {
-        res.status(200).json({ filePath: null, status: 0, success: true });
+        return res.status(200).json({ filePath: null, status: 0, success: true });
       }
     } else {
-      res.status(404).json({ message: '该会话不存在，请输入正确的会话代码' });
+      return res.status(404).json({ message: '该会话不存在，请输入正确的会话代码' });
     }
   } else {
-    res.status(405).json({ message: 'Method not allowed' });
+    return res.status(405).json({ message: 'Method not allowed' });
   }
 }

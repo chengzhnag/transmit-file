@@ -6,6 +6,7 @@ const MyDocument = () => (
   <Html lang="en">
     <Head>
       <link rel="icon" href="/favicon.ico" />
+      <meta name="google-site-verification" content="GWERX3_br4Kd-DNDS6AtM-9H53fdN6vZBumiC6nsqGU" />
     </Head>
     <body>
       <Main />

@@ -7,11 +7,11 @@ import theme from '../theme/themeConfig.js';
 function App({ Component, pageProps }) {
 
   useEffect(() => {
-    const setupVConsole = async () => {
-      const VConsole = (await import('vconsole')).default
-      new VConsole()
-    }
-    setupVConsole()
+    // const setupVConsole = async () => {
+    //   const VConsole = (await import('vconsole')).default
+    //   new VConsole()
+    // }
+    // setupVConsole()
   }, [])
 
   return (

@@ -165,9 +165,9 @@ export default function Entry() {
         ) : null
       }
       <Spin
-        tip="文件发送中，请耐心等待..."
+        tip={`文件发送中，请耐心等待，目前进度${uploadProgress}%...`}
         spinning={uploading}
-        percent={uploadProgress}
+        // percent={uploadProgress}
         fullscreen
       />
     </Layout>

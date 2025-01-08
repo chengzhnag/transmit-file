@@ -23,6 +23,11 @@ export default function handler(req, res) {
       return res.status(404).json({ message: '文件不存在' });
     }
 
+    // 获取文件大小
+    const fileStats = fs.statSync(localFilePath);
+    const fileSize = fileStats.size;
+
+    res.setHeader('Content-Length', fileSize);
     // 设置响应头，触发文件下载
     res.setHeader('Content-Disposition', `attachment; filename=${encodeURIComponent(fileName)}`);
     res.setHeader('Content-Type', 'application/octet-stream');

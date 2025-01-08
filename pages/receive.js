@@ -54,10 +54,11 @@ export default function Entry() {
       setDownLoading(true);
       // 调用下载接口
       const response = await axios({
-        url: `${receivedFile}`,
+        url: `/api/download?code=${code}`,
         method: 'GET',
         responseType: 'blob', // 返回数据类型为 Blob
         onDownloadProgress: (progressEvent) => {
+          console.log('progressEvent:', progressEvent);
           const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
           setProgress(percentCompleted);
         }
@@ -79,7 +80,7 @@ export default function Entry() {
       document.body.removeChild(a);
       setIsDown(true);
       setDownLoading(false);
-      handleRemoveFile();
+      // handleRemoveFile();
     } catch (err) {
       setDownLoading(false);
       console.error('文件下载失败:', err);

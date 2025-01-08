@@ -3,11 +3,29 @@ import {
   Typography, Col, Row,
   Space
 } from 'antd';
-import { FireTwoTone } from '@ant-design/icons';
+import { FireTwoTone, ThunderboltTwoTone, RocketTwoTone } from '@ant-design/icons';
 
 import styles from '../styles/home.module.css';
 
 const { Header, Footer, Content } = Layout;
+
+const characteristics = [
+  {
+    title: '简单',
+    icon: <FireTwoTone style={{ fontSize: 76 }} />,
+    description: '由于 Vercel 的资源限制以及免费服务计划的带宽和性能约束，文件传输速度较慢',
+  },
+  {
+    title: '简单',
+    icon: <ThunderboltTwoTone style={{ fontSize: 76 }} />,
+    description: '我们始终坚持“用爱发电”的理念，致力于为用户提供一个无门槛、无广告的纯净文件传输环境。',
+  },
+  {
+    title: '简单',
+    icon: <RocketTwoTone style={{ fontSize: 76 }} />,
+    description: '不定期更新，认真倾听用户的反馈，优化现有功能，并尝试加入更多实用的新特性。',
+  },
+];
 
 export default function Home() {
 
@@ -17,10 +35,10 @@ export default function Home() {
         <Flex className={styles.headerContent} justify='space-between' align='center'>
           <a className={styles.logo} href="/">
             <img alt="logo" src="https://cdn.jsdelivr.net/gh/Zgrowth/image@master/20250103/method-draw-image-(6).1e8okgy0xx.svg" />
-            <span>LANDING</span>
+            <span>CZ TRANS FILE</span>
           </a>
           <div style={{ display: 'flex' }}>
-            <a href="https://github.com/ant-design/ant-design-landing" alt="help" target="_blank" className={styles.gitbtn}>帮助</a>
+            {/* <a href="https://github.com/ant-design/ant-design-landing" alt="help" target="_blank" className={styles.gitbtn}>帮助</a> */}
             <a href="https://github.com/chengzhnag" alt="git" target="_blank" className={styles.gitbtn}>Github</a>
           </div>
         </Flex>
@@ -31,7 +49,8 @@ export default function Home() {
           <div className={`${styles.contentInnerContent} contentInnerContent`}>
             <img alt="logo" src="https://cdn.jsdelivr.net/gh/Zgrowth/image@master/20250103/method-draw-image-(6).1e8okgy0xx.svg" />
             <p>
-              Ant Design Landing 平台拥有丰富的各类首页模板，下载模板代码包，即可快速使用，也可使用首页编辑器，快速搭建一个属于你的专属首页
+              Chengzhang Trans File 是一款便捷的文件传输平台，专为用户提供跨设备、跨平台的快速文件传输服务。
+              平台以实现最简单的文件传输功能为核心，致力于为用户提供极简的操作体验。
             </p>
             <div className={styles.buttonWrapper}>
               <Space>
@@ -55,11 +74,11 @@ export default function Home() {
             三大特征
           </Typography.Title>
           <Row >
-            {Array.from({ length: 3 }).map((_, i) => (
+            {characteristics.map((_, i) => (
               <Col key={i} xs={24} sm={24} md={8} span={8} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: 48 }}>
-                <FireTwoTone style={{ fontSize: 76 }} />
+                {_.icon}
                 <p style={{ fontSize: 16, color: '#0d1a26', marginTop: 56, textAlign: 'center', padding: '0 48px', maxWidth: 320 }}>
-                  测试文本测试文本测试文本测试文本测试文本测试文本
+                  {_.description}
                 </p>
               </Col>
             ))}

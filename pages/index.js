@@ -49,7 +49,7 @@ export default function Home() {
           <div className={`${styles.contentInnerContent} contentInnerContent`}>
             <img alt="logo" src="https://cdn.jsdelivr.net/gh/Zgrowth/image@master/20250103/method-draw-image-(6).1e8okgy0xx.svg" />
             <p>
-              Chengzhang Trans File 是一款便捷的文件传输平台，专为用户提供跨设备、跨平台的快速文件传输服务。
+              Chengzhnag Trans File 是一款便捷的文件传输平台，专为用户提供跨设备、跨平台的快速文件传输服务。
               平台以实现最简单的文件传输功能为核心，致力于为用户提供极简的操作体验。
             </p>
             <div className={styles.buttonWrapper}>

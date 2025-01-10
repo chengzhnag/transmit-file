@@ -38,8 +38,8 @@ export default function Home() {
             <span>CZ TRANS FILE</span>
           </a>
           <div style={{ display: 'flex' }}>
-            {/* <a href="https://github.com/ant-design/ant-design-landing" alt="help" target="_blank" className={styles.gitbtn}>帮助</a> */}
-            <a href="https://github.com/chengzhnag" alt="git" target="_blank" className={styles.gitbtn}>Github</a>
+            <a href="https://chengzhnag.github.io/collect/2025-1-10-1736479160098.html" alt="help" target="_blank" className={styles.gitbtn}>帮助</a>
+            <a href="https://github.com/chengzhnag/transmit-file" alt="git" target="_blank" className={styles.gitbtn}>Github</a>
           </div>
         </Flex>
       </Header>

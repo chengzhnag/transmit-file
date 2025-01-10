@@ -14,7 +14,7 @@ const MyDocument = () => (
       {/* 关键词 */}
       <meta
         name="keywords"
-        content="文件传输, 跨端传输, 免费文件传输, 文件共享, Chengzhnag Trans File"
+        content="文件传输, 在线文件传输, 跨端传输, 在线跨端传输, 免费文件传输, 在线免费文件传输, 文件共享, 在线文件共享, Chengzhnag Trans File"
       />
       {/* 作者 */}
       <meta name="author" content="Chengzhnag" />
@@ -26,6 +26,10 @@ const MyDocument = () => (
       <meta
         property="og:description"
         content="Chengzhnag Trans File 是一款便捷的文件传输平台，专为用户提供跨设备、跨平台的快速文件传输服务。"
+      />
+      <meta
+        name="og:keywords"
+        content="文件传输, 在线文件传输, 跨端传输, 在线跨端传输, 免费文件传输, 在线免费文件传输, 文件共享, 在线文件共享, Chengzhnag Trans File"
       />
       <meta property="og:type" content="website" />
       <meta property="og:url" content="https://a.952737.xyz" />

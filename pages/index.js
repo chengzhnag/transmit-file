@@ -1,13 +1,15 @@
+import { useMemo } from 'react';
 import {
   Layout, Flex,
   Typography, Col, Row,
-  Space
+  Space, Grid
 } from 'antd';
 import { FireTwoTone, ThunderboltTwoTone, RocketTwoTone } from '@ant-design/icons';
 
 import styles from '../styles/home.module.css';
 
 const { Header, Footer, Content } = Layout;
+const { useBreakpoint } = Grid;
 
 const characteristics = [
   {
@@ -28,17 +30,22 @@ const characteristics = [
 ];
 
 export default function Home() {
+  const screens = useBreakpoint();
+
+  const isMobile = useMemo(() => {
+      return screens?.xs;
+    }, [screens]);
 
   return (
     <Layout>
       <Header className={styles.header}>
-        <Flex className={styles.headerContent} justify='space-between' align='center'>
+        <Flex className={`${styles.headerContent} ${isMobile ? styles.headerContent2 : ''}`} justify='space-between' align='center'>
           <a className={styles.logo} href="/">
             <img alt="logo" src="https://cdn.jsdelivr.net/gh/Zgrowth/image@master/20250103/method-draw-image-(6).1e8okgy0xx.svg" />
             <span>CZ TRANS FILE</span>
           </a>
           <div style={{ display: 'flex' }}>
-            <a href="https://chengzhnag.github.io/collect/2025-1-10-1736479160098.html" alt="help" target="_blank" className={styles.gitbtn}>帮助</a>
+            <a href="https://chengzhnag.github.io/collect/2025-1-10-1736479160098.html" style={{marginLeft: 0}} alt="help" target="_blank" className={styles.gitbtn}>help</a>
             <a href="https://github.com/chengzhnag/transmit-file" alt="git" target="_blank" className={styles.gitbtn}>Github</a>
           </div>
         </Flex>

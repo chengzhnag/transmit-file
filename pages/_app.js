@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { ConfigProvider } from 'antd';
+import { Analytics } from '@vercel/analytics/next';
 import "@/styles/globals.css";
 
 import theme from '../theme/themeConfig.js';
@@ -17,6 +18,7 @@ function App({ Component, pageProps }) {
   return (
     <ConfigProvider theme={theme}>
       <Component {...pageProps} />
+      <Analytics />
     </ConfigProvider>
   );
 }
